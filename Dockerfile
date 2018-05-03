@@ -6,7 +6,7 @@ RUN echo "127.0.0.1  einsteinplano.com" >> /etc/hosts
 # Install apache, PHP, and supplimentary programs. openssh-server, curl, and lynx-cur are for debugging the container.
 RUN apt-get update && apt-get -y upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     apache2 php7.0 php7.0-mysql php7.0-intl libapache2-mod-php7.0 curl lynx-cur php7.0-xml php7.0-zip php7.0-curl php7.0-gd \
-    wget unzip cifs-utils sendmail php7.0-mbstring
+    wget pwgen python-setuptools curl unzip cifs-utils sendmail php7.0-mbstring
 
 # Enable apache mods.
 RUN a2enmod php7.0
@@ -43,10 +43,13 @@ ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 # Set permissions of all site files so they are not publicly writeable
 RUN chmod -R 755 /var/www/core
 RUN chown -R www-data:www-data /var/www/core
-RUN chmod -R 755 /var/www/uploads
+RUN chmod -R 766 /var/www/uploads
 RUN chown -R www-data:www-data /var/www/uploads
-RUN chmod -R 755 /var/www/moodledata
+RUN chmod -R 766 /var/www/moodledata
 RUN chown -R www-data:www-data /var/www/moodledata
+
+# Cleanup, this is ran to reduce the resulting size of the image.
+RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/lib/dpkg/* /var/lib/cache/* /var/lib/log/*
 
 # By default start up apache in the foreground, override with /bin/bash for interactive.
 CMD /usr/sbin/apache2ctl -D FOREGROUND
