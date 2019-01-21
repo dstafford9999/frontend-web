@@ -18,10 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //Sets database connection information
-$databaseServer="127.0.0.1" ;
-$databaseUsername="gibadmin" ;
-$databasePassword='In33d@cc3ss' ;
-$databaseName="gibbon" ;
+$databaseServer="${gibbon-dbserver}" ;
+$databaseUsername="${gibbon-user}" ;
+$databasePassword="${gibbon-password}" ;
+$databaseName="${gibbon-dbname}" ;
 
 //Sets globally unique id, to allow multiple installs on the server server.
 $guid="7omksv5g-pmvu-n5y5-593c-n6y6qfsmrci" ;
