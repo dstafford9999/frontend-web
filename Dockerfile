@@ -66,10 +66,7 @@ WORKDIR /var/www/html
 RUN rm index.html
 
 # Create folders
-
 RUN mkdir /var/www/html/gibbon
-RUN mkdir /var/www/html/gibbon/uploads
-
 
 #Get Gibbon 17
 RUN git clone https://github.com/GibbonEdu/core.git /var/www/html/gibbon
