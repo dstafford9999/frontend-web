@@ -38,8 +38,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     locales \
     sqlite3 \
     unzip \
-    cifsutils \
-    pwgen \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install composer
@@ -68,7 +66,7 @@ RUN mkdir /var/www/html/gibbon
 
 #Get Gibbon 17
 RUN curl -SL https://github.com/GibbonEdu/core/archive/v17.0.00.zip \
-    | unzip v17.0.00.zip -d /var/www/html/gibbon \
+    | unzip v17.0.00.zip -d /var/www/html/gibbon
 
 # Copy config.php
 ADD config.php /var/www/html/gibbon
