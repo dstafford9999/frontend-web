@@ -6,13 +6,11 @@ FROM php:7.2-apache
 # clean up
 RUN apt-get update \
   && apt-get install -y mysql-client curl \
-  && docker-php-ext-install pdo_mysql \
+  && docker-php-ext-install pdo_mysql apt-utils \
   && apt-get clean autoclean \
   && apt-get autoremove \
   && rm -rf /var/cache/apt/archives \
   && rm -rf /var/lib/apt/lists/* \
-  && /tmp/* \
-  && /var/tmp/* \
   && /var/lib/dpkg/* \
   && /var/lib/cache/* \
   && /var/lib/log/* \
