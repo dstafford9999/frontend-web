@@ -75,10 +75,10 @@ RUN git clone https://github.com/GibbonEdu/core.git /var/www/html/gibbon
 ADD config.php /var/www/html/gibbon
 
 # Set permissions of all site files so they are not publicly writeable
-RUN chmod -R 755 /var/www/gibbon
-RUN chown -R www-data:www-data /var/www/gibbon
-RUN chmod -R 766 /var/www/gibbon/uploads
-RUN chown -R www-data:www-data /var/www/gibbon/uploads
+RUN chmod -R 755 /var/www/html/gibbon
+RUN chown -R www-data:www-data /var/www/html/gibbon
+RUN chmod -R 766 /var/www/html/gibbon/uploads
+RUN chown -R www-data:www-data /var/www/html/gibbon/uploads
 
 # By default start up apache in the foreground, override with /bin/bash for interactive.
 CMD ["apache2ctl", "-D", "FOREGROUND"]
