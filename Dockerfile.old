@@ -1,0 +1,53 @@
+FROM ubuntu:18.04
+
+# Add hosts entry
+RUN echo "127.0.0.1  gibbon-dev.einsteinplano.com" >> /etc/hosts
+
+# Install apache, PHP, and supplimentary programs. openssh-server, curl, and lynx-cur are for debugging the container.
+RUN apt-get update && apt-get -y upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install \
+    apache2 php7.2 php7.2-mysql php7.2-intl libapache2-mod-php7.2 curl lynx-cur php7.2-xml php7.2-zip php7.2-curl php7.2-gd \
+    wget pwgen python-setuptools curl unzip cifsutils php7.2-mbstring
+
+# Enable apache mods.
+RUN a2enmod php7.2
+RUN a2enmod rewrite
+
+# Update the PHP.ini file, enable <? ?> tags and quieten logging.
+ADD php.ini /etc/php/7.2/apache2/php.ini
+
+
+
+# Manually set up the apache environment variables
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+ENV APACHE_LOCK_DIR /var/lock/apache2
+ENV APACHE_PID_FILE /var/run/apache2.pid
+
+# Expose apache.
+EXPOSE 80
+
+# Create folders
+RUN mkdir /var/www/html/gibbon/uploads
+RUN mkdir /var/www/html/gibbon
+
+# Copy .htaccess
+# ADD .htaccess /var/www/gibbon
+
+# Copy config.php
+# ADD config.php /var/www/html/gibbon
+
+# Update the default apache site with the config we created.
+ADD 00-gibbon.conf /etc/apache2/sites-enabled/00-gibbon.conf
+
+# Set permissions of all site files so they are not publicly writeable
+RUN chmod -R 755 /var/www/gibbon
+RUN chown -R www-data:www-data /var/www/gibbon
+RUN chmod -R 766 /var/www/gibbon/uploads
+RUN chown -R www-data:www-data /var/www/gibbon/uploads
+
+# Cleanup, this is ran to reduce the resulting size of the image.
+RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/lib/dpkg/* /var/lib/cache/* /var/lib/log/*
+
+# By default start up apache in the foreground, override with /bin/bash for interactive.
+CMD /usr/sbin/apache2ctl -D FOREGROUND
