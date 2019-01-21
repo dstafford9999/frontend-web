@@ -37,7 +37,13 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     iputils-ping \
     locales \
     sqlite3 \
+    apt-transport-https \
+    ca-certificates \
+    software-properties-common \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+#Update Cert Store
+RUN update-ca-certificates
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
